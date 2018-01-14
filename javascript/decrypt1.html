@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<body>
+<title>Project Overkill: JavaScript Example #1</title>
+<h1>Project Overkill: JavaScript Example #1</h1>
+<hr>
+
+<form id="form1" action="">
+<fieldset>
+	<legend>Valid Character Set</legend>
+	<input type="text" name="validCharSet" value="abcdefghijklmnopqrstuvwxyz" size=50>
+</fieldset>
+<fieldset>
+	<legend>Separator Token</legend>
+	<input type="text" name="separatorToken" value="_" size=2>
+</fieldset>
+<fieldset>
+	<legend>Ciphertext to Decrypt</legend>
+	<textarea cols="80" rows="20" name="ciphertext" onchange="eventAction()"></textarea>
+</fieldset>
+</form>
+<form id="form2" action="">
+<fieldset>
+	<legend>Plaintext</legend>
+	<textarea cols="80" rows="10" name="plaintext" readonly>Enter ciphertext.</textarea>
+</fieldset>
+</form>
+
+<script>
+function eventAction() {
+	var validCharSet = document.getElementById("form1").elements[0].elements[0].value;
+	var separatorToken = document.getElementById("form1").elements[2].elements[0].value;
+	var validCharSet = validCharSet + separatorToken;
+	var ciphertext = document.getElementById("form1").elements[4].elements[0].value;
+	var plaintext = ""
+	
+	plaintext = decrypt(validCharSet, separatorToken, ciphertext);
+	document.getElementById("form2").elements[0].elements[0].value = plaintext
+}
+
+function decrypt(v, s, c) {
+	var p = "";
+	var charList = {};
+	// initialize count list (associates character with count) by iterating through valid character set and assigning 0 as count value.
+	for (var i = 0; i < v.length; i++)
+	{
+		var a = v.charAt(i);
+		charList[a]=0;
+	}
+	// iterate over ciphertext c and increase the count value for each valid character
+	for (var i = 0; i < c.length; i++)
+	{
+		var a = c.charAt(i);
+		if (v.includes(a))
+			{
+				charList[a]=charList[a]+1;
+			}
+	}
+	var sepCount = charList[s];
+	var charArray = [];
+	// convert list to associative array so we can sort it
+	for (var key in charList)
+		charArray.push([key,charList[key]]);
+	// sort associative array 
+	charArray.sort(function(x,y) {
+		return y[1] - x[1];
+	});
+	var lastCount = 1;
+	// show characters that appear more often than the separator character
+	for (var i = 0; i < charArray.length; i++)
+	{
+		var currentCount = charArray[i][1];
+		var currentChar = charArray[i][0];
+		if (currentCount > sepCount)
+		{ 
+			p = p + currentChar;
+			if (currentCount == lastCount)
+			{
+				var lastChar = charArray[i-1][0];
+				alert("WARNING: Two or more characters have the same frequency (see "+lastChar+","+currentChar+":"+currentCount+")!");
+			}
+		}
+		lastCount = currentCount;
+	}
+	return p;
+}
+
+</script>
+</body>
+</html>
