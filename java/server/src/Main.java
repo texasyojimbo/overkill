@@ -12,13 +12,13 @@ public class Main {
 		
 		if (args.length > 0)
 		{
-			System.out.println("Initializing Overkill Decryption Server...\n");
+			System.out.println(dateString() + "\t# Initializing Overkill Decryption Server...");
 			int port = Integer.valueOf(args[0].trim());
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 			    public void run() { try {
-			    	System.out.println("\n... Server termination signal received.");
+			    	System.out.println(dateString() + "\t# Server termination signal received.");
 			    	serverSocket.close();
-			    	System.out.println("... Server terminated.");
+			    	System.out.println(dateString() + "\t# Server terminated.");
 				} catch (IOException e) {
 					e.printStackTrace();
 				} }
@@ -36,7 +36,7 @@ public class Main {
 			}
 			
 			System.out.println(dateString() + "\t# Valid Characters:\t"+validCharSet);
-			System.out.println(dateString() + "\t# Separator:\t\t"+separator+"\n");
+			System.out.println(dateString() + "\t# Separator:\t\t"+separator);
 			validCharSet=validCharSet+separator;
 			int[] validCharCount = new int[validCharSet.length()];			
 			
@@ -94,7 +94,7 @@ public class Main {
 						connected = false;
 						outputToClient.writeChars(dateString()+ "\t<# Ctrl-Z received. Hanging up.\n\r");
 						socket.close();
-						System.out.println(dateString()+ "\t# Closed connection.\n");
+						System.out.println(dateString()+ "\t# Closed connection.");
 						break;
 					}
 					else
